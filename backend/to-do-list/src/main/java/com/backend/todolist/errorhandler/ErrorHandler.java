@@ -1,4 +1,4 @@
-package com.backend.todolist.ErrorHandler;
+package com.backend.todolist.errorhandler;
 
 import java.util.Date;
 

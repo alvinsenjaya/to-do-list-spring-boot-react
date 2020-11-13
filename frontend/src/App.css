@@ -1,15 +1,12 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  line-height: 1.4;
+tr.completed {
+  background-color: #c4ffbd
 }
 
 a {
+  color: rgb(253, 254, 255);
   text-decoration: none;
-  color: #eee;
+}
+a:hover {
+   color: rgb(159, 159, 255);
+   text-decoration: none;
 }

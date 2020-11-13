@@ -1,76 +1,62 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+import moment from 'moment';
 
-import AddTodo from './AddTodo';
-
-function Todos() {
+function Todos({id, setId}) {
 	const [todos, setTodos] = useState([]);
-	const [todoChange, setTodoChange] = useState(false);
+	const [changed, setChanged] = useState(false);
 
 	useEffect(() => {
-		loadData();
-	}, [todoChange])
-
-	const loadData = async () => {
-		const response = await axios.get('http://localhost:3001/api/todo');
-		setTodos(response.data);
-	}
-
-	const getStyle = (todo) => {
-		return {
-			background: '#f4f4f4',
-			padding: '5px',
-			borderBottom: '1px dotted',
-			textDecoration: todo.isCompleted? 'line-through' : 'none'
+		const loadData = async () => {
+			const response = await axios.get('http://localhost:3001/api/todo');
+			setTodos(response.data);
 		}
+
+		loadData();
+	}, [changed])
+
+	const markCompleted = async (id) => {
+		await axios.put(`http://localhost:3001/api/todo/${id}/markcomplete`);
+		setChanged(!changed);
 	}
 
-	const markComplete = async (id) => {
-		await axios.put(`http://localhost:3001/api/todo/${id}`);
-		setTodoChange(!todoChange);
-	}
-
-	const delTodo = async (id) => {
+	const deleteTodo = async (id) => {
 		await axios.delete(`http://localhost:3001/api/todo/${id}`);
-		setTodoChange(!todoChange);
+		setChanged(!changed);
 	}
 
 	return (
-		<div>
-			<AddTodo todoChange={todoChange} setTodoChange={setTodoChange} />
-			{
-				todos.map((todo) => (
-					<div key={todo._id} style={getStyle(todo)}>
-						<p>
-							{todo.title}
-							<button style={btnStyle} onClick={() => delTodo(todo._id)}>Delete</button>
-							<button style={btnCompleteStyle} onClick={() => markComplete(todo._id)}>Mark Completed</button>
-						</p>
-					</div>
-				)) 
-			}
-		</div>
+		<div className="container">
+			<h1 className="text-center">Todo List</h1>
+      <table className="table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Target Date</th>
+            <th>Is Completed?</th>
+						<th>Mark Completed</th>
+						<th>Update</th>
+						<th>Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+        {
+          todos.map((todo) => {
+            return <tr className={todo.isCompleted? 'completed' : ''} key={todo._id}>
+              <td>{todo.title}</td>
+              <td>{moment(todo.targetDate).format('ll')}</td>
+              <td>{todo.isCompleted.toString()}</td>
+							<td><button className="btn btn-success" onClick={() => markCompleted(todo._id)}>Mark Completed</button></td>
+							<td><Link to={{pathname: `/update/${todo._id}`}}><button className="btn btn-primary">Update</button></Link></td>
+							<td><button className="btn btn-danger" onClick={() => deleteTodo(todo._id)}>Delete</button></td>
+            </tr>
+          })
+        }
+        </tbody>
+      </table>
+    </div>
 	);
-}
-
-const btnStyle = {
-	background: '#ff0000',
-	color: '#fff',
-	border: 'none',
-	padding: '5px 5px',
-	borderRadius: '10%',
-	cursor: 'pointer',
-	float: 'right'
-}
-
-const btnCompleteStyle = {
-	background: '#00ff55',
-	color: '#000',
-	border: 'none',
-	padding: '5px 5px',
-	borderRadius: '10%',
-	cursor: 'pointer',
-	float: 'right'
 }
 
 export default Todos;

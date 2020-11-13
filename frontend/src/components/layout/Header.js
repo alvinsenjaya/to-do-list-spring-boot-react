@@ -3,18 +3,17 @@ import { Link } from 'react-router-dom';
 
 function Header() {
 	return (
-		<header style={headerStyle}>
-			<h1>ToDoList</h1>
-			<Link to="/">Home</Link> | <Link to="/about">About</Link>
+		<header>
+			<nav className="navbar navbar-expand-md navbar-dark bg-dark">
+        <div className="navbar-brand container">ToDoList App</div>
+        <ul className="navbar-nav justify-content-end container">
+          <li className="nav-link px-4"><Link to='/'>Home</Link></li>
+          <li className="nav-link px-4"><Link to='/add'>Add Todo</Link></li>
+          <li className="nav-link px-4"><Link to='/about'>About</Link></li>
+        </ul>
+      </nav>
 		</header>
 	)
-}
-
-const headerStyle = {
-	background: '#333',
-	color: '#fff',
-	textAlign: 'center',
-	padding: '10px'
 }
 
 export default Header;

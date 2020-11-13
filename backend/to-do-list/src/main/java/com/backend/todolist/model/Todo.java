@@ -1,4 +1,6 @@
-package com.backend.todolist.entity;
+package com.backend.todolist.model;
+
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,33 +14,44 @@ public class Todo {
 	private long _id;
 	
 	private String title;
+	private Date targetDate;
 	private boolean isCompleted;
 	
 	protected Todo() {
 		
 	}
 	
-	public Todo(String title) {
+	public Todo(String title, Date targetDate) {
 		super();
 		this.title = title;
+		this.targetDate = targetDate;
 		this.isCompleted = false;
 	}
 
 	public long get_id() {
 		return _id;
 	}
-	public void set_id(Integer _id) {
-		this._id = _id;
-	}
+
 	public String getTitle() {
 		return title;
 	}
+
 	public void setTitle(String title) {
 		this.title = title;
 	}
+
+	public Date getTargetDate() {
+		return targetDate;
+	}
+
+	public void setTargetDate(Date targetDate) {
+		this.targetDate = targetDate;
+	}
+
 	public boolean getIsCompleted() {
 		return isCompleted;
 	}
+
 	public void setIsCompleted(boolean isCompleted) {
 		this.isCompleted = isCompleted;
 	}

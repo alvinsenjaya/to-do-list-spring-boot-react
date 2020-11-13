@@ -1,19 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import moment from 'moment';
 
-function AddTodo() {
+function UpdateTodo({match, props}) {
 	const [title, setTitle] = useState('');
   const [targetDate, setTargetDate] = useState('');
   const [message, setMessage] = useState('');
 
-	const onSubmit = async (e) => {
-		e.preventDefault();
-		await axios.post('http://localhost:3001/api/todo', {title, targetDate});
-    setTitle('');
-    setTargetDate('');
-    setMessage('Todo successfully created');
+  const onSubmit = async (e) => {
+    e.preventDefault();
+		await axios.put(`http://localhost:3001/api/todo/${match.params.id}`, {title, targetDate});
+    setMessage('Todo successfully updated');
   }
 
+  useEffect(() => {
+    const loadData = async () => {
+      const response = await axios.get(`http://localhost:3001/api/todo/${match.params.id}`);
+      setTitle(response.data.title);
+      setTargetDate(moment(response.data.targetDate).format('YYYY-MM-DD'));
+    }
+    
+		loadData();
+  }, [match.params.id]);
+  
   const showMessage = () => {
     if(message === ''){
       return <div></div>
@@ -26,13 +35,12 @@ function AddTodo() {
 	return (
 		<div className="container">
       <form onSubmit={onSubmit}>
-        <h1>Add New Todo</h1>
+        <h1>Update Todo</h1>
         <div className="form-group">
           <label>Title</label>
           <input 
             value={title} 
             onChange={e => setTitle(e.target.value)} 
-            placeholder="Title"
             className="form-control">
           </input>
         </div>
@@ -45,11 +53,11 @@ function AddTodo() {
             className="form-control">
           </input>
         </div>
-        <button className="btn btn-primary">Add Todo</button>
+        <button className="btn btn-primary">Update Todo</button>
       </form>
       {showMessage()}
     </div>
 	)
 }
 
-export default AddTodo;
+export default UpdateTodo;

@@ -5,12 +5,26 @@ function AddTodo() {
 	const [title, setTitle] = useState('');
   const [targetDate, setTargetDate] = useState('');
   const [message, setMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
 	const onSubmit = async (e) => {
-		e.preventDefault();
-		await axios.post('http://localhost:3001/api/todo', {title, targetDate});
+    e.preventDefault();
+
+    try {
+      await axios.post('http://localhost:3001/api/todo', {title, targetDate})
+    } catch(error){
+      setMessage('');
+      if (error.response) {
+        setErrorMessage(error.response.data.message);
+      } else {
+        setErrorMessage('Error: something happened');
+      }
+      return;
+    }
+    
     setTitle('');
     setTargetDate('');
+    setErrorMessage('');
     setMessage('Todo successfully created');
   }
 
@@ -21,6 +35,16 @@ function AddTodo() {
     return <div className="alert alert-success" role="alert">
       {message}
     </div> 
+  }
+
+  const showErrorMessage = () => {
+    if(errorMessage === ''){
+      return <div></div>
+    }
+
+    return <div className="alert alert-danger" role="alert">
+      {errorMessage}
+    </div>
   }
 
 	return (
@@ -48,6 +72,7 @@ function AddTodo() {
         <button className="btn btn-primary">Add Todo</button>
       </form>
       {showMessage()}
+      {showErrorMessage()}
     </div>
 	)
 }

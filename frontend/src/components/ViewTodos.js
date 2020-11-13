@@ -6,10 +6,22 @@ import moment from 'moment';
 function Todos({id, setId}) {
 	const [todos, setTodos] = useState([]);
 	const [changed, setChanged] = useState(false);
+	const [errorMessage, setErrorMessage] = useState('');
 
 	useEffect(() => {
 		const loadData = async () => {
-			const response = await axios.get('http://localhost:3001/api/todo');
+			let response = null;
+			try {
+				response = await axios.get('http://localhost:3001/api/todo');
+			} catch(error){
+				if (error.response) {
+					setErrorMessage(error.response.data.message);
+				} else {
+					setErrorMessage('Error: something happened');
+				}
+				return;
+			}
+			setErrorMessage('');
 			setTodos(response.data);
 		}
 
@@ -17,18 +29,49 @@ function Todos({id, setId}) {
 	}, [changed])
 
 	const markCompleted = async (id) => {
-		await axios.put(`http://localhost:3001/api/todo/${id}/markcomplete`);
+		try {
+      await axios.put(`http://localhost:3001/api/todo/${id}/markcomplete`);
+    } catch(error){
+      if (error.response) {
+        setErrorMessage(error.response.data.message);
+      } else {
+        setErrorMessage('Error: something happened');
+      }
+      return;
+		}
+		setErrorMessage('');
 		setChanged(!changed);
 	}
 
 	const deleteTodo = async (id) => {
-		await axios.delete(`http://localhost:3001/api/todo/${id}`);
+		try {
+      await axios.delete(`http://localhost:3001/api/todo/${id}`);
+    } catch(error){
+      if (error.response) {
+        setErrorMessage(error.response.data.message);
+      } else {
+        setErrorMessage('Error: something happened');
+      }
+      return;
+		}
+		setErrorMessage('');
 		setChanged(!changed);
 	}
+
+	const showErrorMessage = () => {
+    if(errorMessage === ''){
+      return <div></div>
+    }
+
+    return <div className="alert alert-danger" role="alert">
+      {errorMessage}
+    </div>
+  }
 
 	return (
 		<div className="container">
 			<h1 className="text-center">Todo List</h1>
+			{showErrorMessage()}
       <table className="table">
         <thead>
           <tr>

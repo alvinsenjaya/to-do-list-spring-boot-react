@@ -38,6 +38,11 @@ public class ErrorHandler {
 		return status;
 	}
 	
+	@Override
+	public String toString() {
+		return "ErrorHandler [timestamp=" + timestamp + ", message=" + message + ", status=" + status + "]";
+	}
+
 	public ResponseEntity<Object> handler() {
 		return new ResponseEntity<>(this, this.status);
 	}

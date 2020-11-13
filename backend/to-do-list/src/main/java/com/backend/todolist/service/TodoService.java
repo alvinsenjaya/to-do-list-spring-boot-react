@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.backend.todolist.errorhandler.ResourceNotFoundException;
 import com.backend.todolist.model.Todo;
 import com.backend.todolist.model.TodoRepository;
 
@@ -20,10 +21,10 @@ public class TodoService {
 	
 	public Todo readById(long _id) {
 		Optional<Todo> todo = todoRepository.findById(_id);
-		if(todo.isPresent()) {
-			return todo.get();
+		if(!todo.isPresent()) {
+			throw new ResourceNotFoundException("Todo not found");
 		}
-		return null;
+		return todo.get();
 	}
 	
 	public List<Todo> readAll( ) {
@@ -31,13 +32,17 @@ public class TodoService {
 	}
 	
 	public void deleteById(long _id) {
+		Optional<Todo> todoData = todoRepository.findById(_id);
+		if(!todoData.isPresent()) {
+			throw new ResourceNotFoundException("Todo not found");
+		}
 		todoRepository.deleteById(_id);
 	}
 	
 	public Todo updateById(long _id, Todo todo) {
 		Optional<Todo> todoData = todoRepository.findById(_id);
 		if(!todoData.isPresent()) {
-			return null;
+			throw new ResourceNotFoundException("Todo not found");
 		}
 		
 		Todo _todo = todoData.get();
@@ -49,7 +54,7 @@ public class TodoService {
 	public Todo markCompleteById(long _id) {
 		Optional<Todo> todo = todoRepository.findById(_id);
 		if(!todo.isPresent()) {
-			return null;
+			throw new ResourceNotFoundException("Todo not found");
 		}
 		
 		Todo _todo = todo.get();

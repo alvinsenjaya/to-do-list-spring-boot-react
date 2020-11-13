@@ -5,6 +5,8 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Todo {
@@ -13,8 +15,12 @@ public class Todo {
 	@GeneratedValue
 	private long _id;
 	
+	@NotEmpty(message = "Title is required")
 	private String title;
+
+	@NotNull(message = "Target date is required")
 	private Date targetDate;
+	
 	private boolean isCompleted;
 	
 	protected Todo() {
@@ -60,6 +66,5 @@ public class Todo {
 	public String toString() {
 		return "Todo [_id=" + _id + ", title=" + title + ", isCompleted=" + isCompleted + "]";
 	}
-	
 	
 }

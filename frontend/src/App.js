@@ -1,11 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
-import Todos from './components/ViewTodos'
-import Header from './components/layout/Header';
-import About from './components/pages/About';
-import AddTodo from './components/AddTodo';
-import UpdateTodo from './components/UpdateTodo';
+import Header from './components/header/Header';
+import About from './components/about/About';
+import Todos from './components/todo/ViewTodos'
+import AddTodo from './components/todo/AddTodo';
+import UpdateTodo from './components/todo/UpdateTodo';
 
 import './bootstrap.min.css';
 import './App.css';

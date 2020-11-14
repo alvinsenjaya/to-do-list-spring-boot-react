@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import moment from 'moment';
 
-function AddTodo() {
+function UpdateTodo({match}) {
 	const [title, setTitle] = useState('');
   const [targetDate, setTargetDate] = useState('');
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-	const onSubmit = async (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
-      await axios.post('http://localhost:3001/api/todo', {title, targetDate})
+      await axios.put(`http://localhost:3001/api/todo/${match.params.id}`, {title, targetDate});
     } catch(error){
       setMessage('');
       if (error.response) {
@@ -21,13 +22,37 @@ function AddTodo() {
       }
       return;
     }
-    
-    setTitle('');
-    setTargetDate('');
+
     setErrorMessage('');
-    setMessage('Todo successfully created');
+    setMessage('Todo successfully updated');
   }
 
+  useEffect(() => {
+    const loadData = async () => {
+      let response = null;
+      try {
+        response = await axios.get(`http://localhost:3001/api/todo/${match.params.id}`);
+      } catch(error){
+        setMessage('');
+        if (error.response) {
+          setErrorMessage(error.response.data.message);
+        } else {
+          setErrorMessage('Error: something happened');
+        }
+        return;
+      }
+      setErrorMessage('');
+      setTitle(response.data.title);
+      setTargetDate(moment(response.data.targetDate).format('YYYY-MM-DD'));
+    }
+    
+		loadData();
+  }, [match.params.id]);
+
+  useEffect(() => {
+    setMessage('')
+  }, [title, targetDate])
+  
   const showMessage = () => {
     if(message === ''){
       return <div></div>
@@ -50,13 +75,12 @@ function AddTodo() {
 	return (
 		<div className="container">
       <form onSubmit={onSubmit}>
-        <h1>Add New Todo</h1>
+        <h1>Update Todo</h1>
         <div className="form-group">
           <label>Title</label>
           <input 
             value={title} 
             onChange={e => setTitle(e.target.value)} 
-            placeholder="Title"
             className="form-control">
           </input>
         </div>
@@ -69,7 +93,7 @@ function AddTodo() {
             className="form-control">
           </input>
         </div>
-        <button className="btn btn-primary">Add Todo</button>
+        <button className="btn btn-primary">Update Todo</button>
       </form>
       {showMessage()}
       {showErrorMessage()}
@@ -77,4 +101,4 @@ function AddTodo() {
 	)
 }
 
-export default AddTodo;
+export default UpdateTodo;

@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -24,6 +25,12 @@ public class GlobalExceptionHandler {
 	
 	@ExceptionHandler(BadRequestException.class)
 	public ResponseEntity<Object> handleBadRequestException(BadRequestException ex) {
+		CustomException err = new CustomException(LocalDateTime.now(), HttpStatus.BAD_REQUEST, ex.getMessage());
+		return ResponseEntityBuilder.build(err);
+	}
+	
+	@ExceptionHandler(BadCredentialsException.class)
+	public ResponseEntity<Object> handleUsernameNotFoundException(BadCredentialsException ex) {
 		CustomException err = new CustomException(LocalDateTime.now(), HttpStatus.BAD_REQUEST, ex.getMessage());
 		return ResponseEntityBuilder.build(err);
 	}

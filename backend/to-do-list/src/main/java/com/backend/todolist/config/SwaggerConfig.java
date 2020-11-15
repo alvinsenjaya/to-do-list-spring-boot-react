@@ -1,5 +1,6 @@
 package com.backend.todolist.config;
 
+import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class SwaggerConfig {
 	public Docket api() {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.forCodeGeneration(true)
+				.ignoredParameterTypes(Principal.class)
 		        .globalOperationParameters(globalParameterList()) 
 				.select()
                 .apis(RequestHandlerSelectors.basePackage("com.backend.todolist"))
@@ -32,7 +34,7 @@ public class SwaggerConfig {
 	        new ParameterBuilder()
 	            .name("Authorization") // name of the header
 	            .modelRef(new ModelRef("string"))
-	            .required(false)
+	            .required(true)
 	            .parameterType("header")
 	            .description("Bearer <token>")
 	            .build();

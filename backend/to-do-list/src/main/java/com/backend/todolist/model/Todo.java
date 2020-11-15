@@ -21,21 +21,36 @@ public class Todo {
 	@NotNull(message = "Target date is required")
 	private Date targetDate;
 	
+	private String username;
+	
 	private boolean isCompleted;
 	
 	protected Todo() {
 		
 	}
 	
-	public Todo(String title, Date targetDate) {
+	public Todo(String title, Date targetDate, String username) {
 		super();
 		this.title = title;
 		this.targetDate = targetDate;
+		this.username = username;
 		this.isCompleted = false;
 	}
-
+	
 	public long get_id() {
 		return _id;
+	}
+
+	public void set_id(long _id) {
+		this._id = _id;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getTitle() {
@@ -64,7 +79,8 @@ public class Todo {
 
 	@Override
 	public String toString() {
-		return "Todo [_id=" + _id + ", title=" + title + ", isCompleted=" + isCompleted + "]";
+		return "Todo [_id=" + _id + ", title=" + title + ", targetDate=" + targetDate + ", username=" + username
+				+ ", isCompleted=" + isCompleted + "]";
 	}
 	
 }

@@ -1,22 +1,38 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import Header from './components/header/Header';
-import About from './components/about/About';
+import About from './components/page/About';
 import Todos from './components/todo/ViewTodos'
 import AddTodo from './components/todo/AddTodo';
 import UpdateTodo from './components/todo/UpdateTodo';
+import Signin from './components/auth/Signin';
+import Signup from './components/auth/Signup';
+import Signout from './components/auth/Signout';
+import Landing from './components/page/Landing';
 
 import './bootstrap.min.css';
 import './App.css';
 
 function App () {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    if(sessionStorage.getItem('token') !== null){
+      setIsAuthenticated(true);
+    }
+  }, [])
+
   return (
     <Router>
     <div className="App">
-      <Header />
+      <Header isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
       <div>
-        <Route exact path="/" component={Todos} />
+        <Route exact path="/" render={(props) => (<Landing {...props} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />)} />
+        <Route exact path="/signin" render={(props) => (<Signin {...props} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />)} />
+        <Route exact path="/signup" render={(props) => (<Signup {...props} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />)} />
+        <Route exact path="/signout" render={(props) => (<Signout {...props} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />)} />
+        <Route exact path="/todo" component={Todos} />
         <Route exact path="/add" component={AddTodo} />
         <Route exact path="/update/:id" component={UpdateTodo} />
         <Route exact path="/about" component={About} />

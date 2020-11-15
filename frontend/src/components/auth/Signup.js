@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-function AddTodo() {
-	const [title, setTitle] = useState('');
-  const [targetDate, setTargetDate] = useState('');
+function Signup({isAuthenticated, setIsAuthenticated}) {
+	const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -11,11 +11,10 @@ function AddTodo() {
     e.preventDefault();
 
     try {
-      await axios.post('http://localhost:3001/api/todo', {title, targetDate}, {
-        headers: {
-          'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
-        }
-      })
+      const response = await axios.post('http://localhost:3001/api/auth/signup', {username, password});
+      sessionStorage.setItem('token', response.data.token);
+      sessionStorage.setItem('name', response.data.username);
+      setIsAuthenticated(true);
     } catch(error){
       setMessage('');
       if (error.response) {
@@ -23,18 +22,19 @@ function AddTodo() {
       } else {
         setErrorMessage('Error: something happened');
       }
+      setIsAuthenticated(false);
       return;
     }
     
-    setTitle('');
-    setTargetDate('');
+    setUsername('');
+    setPassword('');
     setErrorMessage('');
-    setMessage('Todo successfully created');
+    setMessage('Sign up successful');
   }
 
   useEffect(() => {
     setMessage('')
-  }, [title, targetDate])
+  }, [username, password])
 
   const showMessage = () => {
     if(message === ''){
@@ -58,26 +58,27 @@ function AddTodo() {
 	return (
 		<div className="container">
       <form onSubmit={onSubmit}>
-        <h1>Add New Todo</h1>
+        <h1>Sign Up</h1>
         <div className="form-group">
-          <label>Title</label>
+          <label>Username</label>
           <input 
-            value={title} 
-            onChange={e => setTitle(e.target.value)} 
-            placeholder="Title"
+            value={username} 
+            onChange={e => setUsername(e.target.value)} 
+            placeholder="Username"
             className="form-control">
           </input>
         </div>
         <div className="form-group">
-          <label>Target Date</label>
+          <label>Password</label>
           <input 
-            value={targetDate} 
-            type="date" 
-            onChange={e => setTargetDate(e.target.value)} 
+            value={password} 
+            type="password" 
+            onChange={e => setPassword(e.target.value)}
+            placeholder="Password"
             className="form-control">
           </input>
         </div>
-        <button className="btn btn-primary">Add Todo</button>
+        <button className="btn btn-primary">Sign Up</button>
       </form>
       {showMessage()}
       {showErrorMessage()}
@@ -85,4 +86,4 @@ function AddTodo() {
 	)
 }
 
-export default AddTodo;
+export default Signup;

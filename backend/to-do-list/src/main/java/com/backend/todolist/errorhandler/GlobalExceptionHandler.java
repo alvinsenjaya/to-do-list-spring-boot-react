@@ -7,9 +7,11 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
 import org.springframework.validation.BindingResult;
 
 @ControllerAdvice
@@ -23,6 +25,18 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(BadRequestException.class)
 	public ResponseEntity<Object> handleBadRequestException(BadRequestException ex) {
 		CustomException err = new CustomException(LocalDateTime.now(), HttpStatus.BAD_REQUEST, ex.getMessage());
+		return ResponseEntityBuilder.build(err);
+	}
+	
+	@ExceptionHandler(InvalidJwtAuthenticationException.class)
+	public ResponseEntity<Object> handleInvalidJwtAuthenticationException(InvalidJwtAuthenticationException ex) {
+		CustomException err = new CustomException(LocalDateTime.now(), HttpStatus.UNAUTHORIZED, ex.getMessage());
+		return ResponseEntityBuilder.build(err);
+	}
+	
+	@ExceptionHandler(UsernameNotFoundException.class)
+	public ResponseEntity<Object> handleUsernameNotFoundException(UsernameNotFoundException ex) {
+		CustomException err = new CustomException(LocalDateTime.now(), HttpStatus.UNAUTHORIZED, "Expired or invalid JWT token");
 		return ResponseEntityBuilder.build(err);
 	}
 	
@@ -49,7 +63,7 @@ public class GlobalExceptionHandler {
 	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Object> handleAll(Exception ex) {
-		CustomException err = new CustomException(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+		CustomException err = new CustomException(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR, "Something happened");
 		return ResponseEntityBuilder.build(err);
 	}
 }

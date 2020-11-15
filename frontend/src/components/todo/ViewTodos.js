@@ -12,7 +12,11 @@ function Todos({id, setId}) {
 		const loadData = async () => {
 			let response = null;
 			try {
-				response = await axios.get('http://localhost:3001/api/todo');
+				response = await axios.get('http://localhost:3001/api/todo', {
+					headers: {
+						'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
+					}
+				});
 			} catch(error){
 				if (error.response) {
 					setErrorMessage(error.response.data.message);
@@ -30,7 +34,11 @@ function Todos({id, setId}) {
 
 	const markCompleted = async (id) => {
 		try {
-      await axios.put(`http://localhost:3001/api/todo/${id}/markcomplete`);
+      await axios.put(`http://localhost:3001/api/todo/${id}/markcomplete`, {}, {
+				headers: {
+					'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+				}
+			});
     } catch(error){
       if (error.response) {
         setErrorMessage(error.response.data.message);
@@ -45,7 +53,11 @@ function Todos({id, setId}) {
 
 	const deleteTodo = async (id) => {
 		try {
-      await axios.delete(`http://localhost:3001/api/todo/${id}`);
+      await axios.delete(`http://localhost:3001/api/todo/${id}`, {
+				headers: {
+					'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+				}
+			});
     } catch(error){
       if (error.response) {
         setErrorMessage(error.response.data.message);

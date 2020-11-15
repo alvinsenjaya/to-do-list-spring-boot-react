@@ -12,7 +12,11 @@ function UpdateTodo({match}) {
     e.preventDefault();
   
     try {
-      await axios.put(`http://localhost:3001/api/todo/${match.params.id}`, {title, targetDate});
+      await axios.put(`http://localhost:3001/api/todo/${match.params.id}`, {title, targetDate}, {
+        headers: {
+          'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+        }
+      });
     } catch(error){
       setMessage('');
       if (error.response) {
@@ -31,7 +35,11 @@ function UpdateTodo({match}) {
     const loadData = async () => {
       let response = null;
       try {
-        response = await axios.get(`http://localhost:3001/api/todo/${match.params.id}`);
+        response = await axios.get(`http://localhost:3001/api/todo/${match.params.id}`, {
+          headers: {
+						'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+					}
+        });
       } catch(error){
         setMessage('');
         if (error.response) {

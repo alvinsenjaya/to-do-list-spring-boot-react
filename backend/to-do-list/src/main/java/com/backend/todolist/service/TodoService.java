@@ -1,64 +1,64 @@
 package com.backend.todolist.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+import com.backend.todolist.controller.TodoCreateRequest;
+import com.backend.todolist.controller.TodoUpdateRequest;
 import com.backend.todolist.errorhandler.ResourceNotFoundException;
 import com.backend.todolist.model.Todo;
-import com.backend.todolist.model.TodoRepository;
+import com.backend.todolist.repository.TodoRepository;
 
-@Component
+@Service
 public class TodoService {
 	@Autowired
 	private TodoRepository todoRepository;
 	
-	public Todo create(Todo todo) {
+	public Todo create(TodoCreateRequest todoCreateRequest, String username) {
+		Todo todo = new Todo(todoCreateRequest.getTitle(), todoCreateRequest.getTargetDate(), username);
 		return todoRepository.save(todo);
 	}
 	
-	public Todo readById(long _id) {
-		Optional<Todo> todo = todoRepository.findById(_id);
-		if(!todo.isPresent()) {
+	public Todo readById(long _id, String username) {
+		Todo todo = todoRepository.findByUsernameAnd_id(username, _id);
+		if(todo == null) {
 			throw new ResourceNotFoundException("Todo not found");
 		}
-		return todo.get();
+		return todo;
 	}
 	
-	public List<Todo> readAll( ) {
-		return todoRepository.findAll();
+	public List<Todo> readAll(String username) {
+		return todoRepository.findByUsername(username);
 	}
 	
-	public void deleteById(long _id) {
-		Optional<Todo> todoData = todoRepository.findById(_id);
-		if(!todoData.isPresent()) {
+	public void deleteById(long _id, String username) {
+		Todo todo = todoRepository.findByUsernameAnd_id(username, _id);
+		if(todo == null) {
 			throw new ResourceNotFoundException("Todo not found");
 		}
 		todoRepository.deleteById(_id);
 	}
 	
-	public Todo updateById(long _id, Todo todo) {
-		Optional<Todo> todoData = todoRepository.findById(_id);
-		if(!todoData.isPresent()) {
+	public Todo updateById(long _id, TodoUpdateRequest todoUpdateRequest, String username) {
+		Todo todo = todoRepository.findByUsernameAnd_id(username, _id);
+		if(todo == null) {
 			throw new ResourceNotFoundException("Todo not found");
 		}
 		
-		Todo _todo = todoData.get();
-		_todo.setTitle(todo.getTitle());
-		_todo.setTargetDate(todo.getTargetDate());
-		return todoRepository.save(_todo);
+		todo.setTitle(todoUpdateRequest.getTitle());
+		todo.setTargetDate(todoUpdateRequest.getTargetDate());
+		return todoRepository.save(todo);
 	}
 	
-	public Todo markCompleteById(long _id) {
-		Optional<Todo> todo = todoRepository.findById(_id);
-		if(!todo.isPresent()) {
+	public Todo markCompleteById(long _id, String username) {
+		Todo todo = todoRepository.findByUsernameAnd_id(username, _id);
+		if(todo == null) {
 			throw new ResourceNotFoundException("Todo not found");
 		}
 		
-		Todo _todo = todo.get();
-		_todo.setIsCompleted(!_todo.getIsCompleted());
-		return todoRepository.save(_todo);
+		todo.setIsCompleted(!todo.getIsCompleted());
+		return todoRepository.save(todo);
 	}
 }

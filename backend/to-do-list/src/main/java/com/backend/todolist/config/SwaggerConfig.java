@@ -36,7 +36,7 @@ public class SwaggerConfig {
 	            .modelRef(new ModelRef("string"))
 	            .required(true)
 	            .parameterType("header")
-	            .description("Bearer <token>")
+	            .description("Bearer [JWT_TOKEN]")
 	            .build();
 
 	    return Collections.singletonList(authTokenHeader);

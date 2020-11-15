@@ -46,9 +46,4 @@ public class UserController {
     public ResponseEntity<Object> signup(@Valid @RequestBody UserSignupRequest userSignupRequest) {
 		return new ResponseEntity<>(userService.signup(userSignupRequest), HttpStatus.OK);
     }
-	
-	@RequestMapping(value = "/api/auth/me", method = RequestMethod.GET)
-    public ResponseEntity<Object> me(Principal principal) {
-		return new ResponseEntity<>(principal.getName(), HttpStatus.OK);
-    }
 }

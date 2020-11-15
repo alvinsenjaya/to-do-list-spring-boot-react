@@ -19,13 +19,25 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig {
 	@Bean
-	public Docket api() {
+	public Docket userApi() {
 		return new Docket(DocumentationType.SWAGGER_2)
+				.groupName("Auth")
+				.forCodeGeneration(true)
+				.ignoredParameterTypes(Principal.class)
+				.select()
+                .apis(RequestHandlerSelectors.basePackage("com.backend.todolist.auth.controller"))
+                .build();
+	}
+	
+	@Bean
+	public Docket todoApi() {
+		return new Docket(DocumentationType.SWAGGER_2)
+				.groupName("Todo")
 				.forCodeGeneration(true)
 				.ignoredParameterTypes(Principal.class)
 		        .globalOperationParameters(globalParameterList()) 
 				.select()
-                .apis(RequestHandlerSelectors.basePackage("com.backend.todolist"))
+                .apis(RequestHandlerSelectors.basePackage("com.backend.todolist.controller"))
                 .build();
 	}
 	

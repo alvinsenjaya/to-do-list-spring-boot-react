@@ -1,6 +1,7 @@
 package com.backend.todolist.controller;
 
 import java.security.Principal;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.backend.todolist.model.Todo;
 import com.backend.todolist.service.TodoService;
 
 @RestController
@@ -23,27 +25,27 @@ public class TodoController {
 	private TodoService todoService;
 	
 	@RequestMapping(value = "/api/todo", method = RequestMethod.POST)
-	public ResponseEntity<Object> createTodo(@Valid @RequestBody TodoCreateRequest todoCreateRequest, Principal principal) {
+	public ResponseEntity<Todo> createTodo(@Valid @RequestBody TodoCreateRequest todoCreateRequest, Principal principal) {
 		return new ResponseEntity<>(todoService.create(todoCreateRequest, principal.getName()), HttpStatus.CREATED);
 	}
 	
 	@RequestMapping(value = "/api/todo", method = RequestMethod.GET)
-	public ResponseEntity<Object> todoReadAll(Principal principal){
+	public ResponseEntity<List<Todo>> todoReadAll(Principal principal){
 		return new ResponseEntity<>(todoService.readAll(principal.getName()), HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/api/todo/{_id}", method = RequestMethod.GET)
-	public ResponseEntity<Object> todoRead(@PathVariable long _id, Principal principal) {
+	public ResponseEntity<Todo> todoRead(@PathVariable long _id, Principal principal) {
 		return new ResponseEntity<>(todoService.readById(_id, principal.getName()), HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/api/todo/{_id}/markcomplete", method = RequestMethod.PUT)
-	public ResponseEntity<Object> markCompleteTodo(@PathVariable long _id, Principal principal) {
+	public ResponseEntity<Todo> markCompleteTodo(@PathVariable long _id, Principal principal) {
 		return new ResponseEntity<>(todoService.markCompleteById(_id, principal.getName()), HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/api/todo/{_id}", method = RequestMethod.PUT)
-	public ResponseEntity<Object> updateTodo(@PathVariable long _id, @Valid @RequestBody TodoUpdateRequest todoUpdateRequest, Principal principal) {
+	public ResponseEntity<Todo> updateTodo(@PathVariable long _id, @Valid @RequestBody TodoUpdateRequest todoUpdateRequest, Principal principal) {
 		return new ResponseEntity<>(todoService.updateById(_id, todoUpdateRequest, principal.getName()), HttpStatus.OK);
 	}
 	

@@ -1,7 +1,5 @@
 package com.backend.todolist.auth.controller;
 
-import java.security.Principal;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,12 +36,12 @@ public class UserController {
 	UserService userService;
     
 	@RequestMapping(value = "/api/auth/signin", method = RequestMethod.POST)
-    public ResponseEntity<Object> signin(@Valid @RequestBody UserSigninRequest userSigninRequest) {
+    public ResponseEntity<UserSigninResponse> signin(@Valid @RequestBody UserSigninRequest userSigninRequest) {
 		return new ResponseEntity<>(userService.signin(userSigninRequest), HttpStatus.OK);
     }
 	
 	@RequestMapping(value = "/api/auth/signup", method = RequestMethod.POST)
-    public ResponseEntity<Object> signup(@Valid @RequestBody UserSignupRequest userSignupRequest) {
+    public ResponseEntity<UserSignupResponse> signup(@Valid @RequestBody UserSignupRequest userSignupRequest) {
 		return new ResponseEntity<>(userService.signup(userSignupRequest), HttpStatus.OK);
     }
 }

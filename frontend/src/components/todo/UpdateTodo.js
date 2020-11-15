@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import moment from 'moment';
+import { useHistory } from "react-router-dom"; 
 
 function UpdateTodo({match}) {
 	const [title, setTitle] = useState('');
   const [targetDate, setTargetDate] = useState('');
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  let history = useHistory();
+
+  function timeout(delay) {
+    return new Promise( res => setTimeout(res, delay) );
+  }
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -29,6 +35,8 @@ function UpdateTodo({match}) {
 
     setErrorMessage('');
     setMessage('Todo successfully updated');
+    await timeout(1000);
+    history.push("/todo");
   }
 
   useEffect(() => {

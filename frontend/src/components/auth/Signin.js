@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useHistory } from "react-router-dom"; 
 
 function Signin({isAuthenticated, setIsAuthenticated}) {
 	const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  let history = useHistory();
+
+  function timeout(delay) {
+    return new Promise( res => setTimeout(res, delay) );
+  }
 
 	const onSubmit = async (e) => {
     e.preventDefault();
@@ -30,6 +36,8 @@ function Signin({isAuthenticated, setIsAuthenticated}) {
     setPassword('');
     setErrorMessage('');
     setMessage('Sign in successful');
+    await timeout(1000);
+    history.push("/");
   }
 
   useEffect(() => {

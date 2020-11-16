@@ -2,17 +2,29 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import { useHistory } from "react-router-dom"; 
 
-function Todos({id, setId}) {
+function Todos({isAuthenticated, setIsAuthenticated}) {
 	const [todos, setTodos] = useState([]);
 	const [changed, setChanged] = useState(false);
 	const [errorMessage, setErrorMessage] = useState('');
+	const [pageNumber, setPageNumber] = useState(1);
+	const [pageSize, setPageSize] = useState(5);
+	const [inputPageNumber, setInputPageNumber] = useState(pageNumber);
+	const [inputPageSize, setInputPageSize] = useState(pageSize);
+	let history = useHistory();
+
+	useEffect(() => {
+		if(!isAuthenticated){
+			history.push("/");
+		}
+	}, [isAuthenticated, history])
 
 	useEffect(() => {
 		const loadData = async () => {
 			let response = null;
 			try {
-				response = await axios.get('http://localhost:3001/api/todo', {
+				response = await axios.get(`http://localhost:3001/api/todo/${pageNumber - 1}/${pageSize}`, {
 					headers: {
 						'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
 					}
@@ -30,7 +42,73 @@ function Todos({id, setId}) {
 		}
 
 		loadData();
-	}, [changed])
+	}, [changed, pageNumber, pageSize])
+
+	const nextPage = () => {
+		setPageNumber(pageNumber + 1);
+		setInputPageNumber(pageNumber + 1);
+	}
+
+	const previousPage = () => {
+		if(pageNumber > 1){
+			setPageNumber(pageNumber - 1);
+			setInputPageNumber(pageNumber - 1);
+		}
+	}
+
+	const enterPageNumber = (enteredPageNumber) => {
+		if(enteredPageNumber >= 1){
+			setPageNumber(parseInt(enteredPageNumber));
+		} else {
+			setPageNumber(1);
+			setInputPageNumber(1);
+		}
+	}
+
+	const enterPageSize = (enteredPageSize) => {
+		if(enteredPageSize >= 1){
+			setPageSize(parseInt(enteredPageSize));
+		} else {
+			setPageSize(1);
+			setInputPageSize(1);
+		}
+	}
+
+	const pageNumberControl = () => {
+		return <div>
+			<center>
+				<div className="input-group col-sm-4">
+					<div className="input-group-append">
+						<button className="btn btn-outline-secondary" onClick={() => previousPage()} >Previous Page</button>
+					</div>
+					<input className="form-control text-center" type="number" value={inputPageNumber} onChange={e => setInputPageNumber(e.target.value)} onKeyPress={e => {
+									if (e.key === 'Enter') {
+										enterPageNumber(e.target.value)
+									}
+								}}/>
+					<div className="input-group-append">
+						<button className="btn btn-outline-secondary" onClick={() => nextPage()}>Next Page</button>
+					</div>
+				</div>
+			</center>
+		</div>
+	}
+
+	const pageSizeControl = () => {
+		return <center>
+			<div className="input-group col-sm-3">
+				<div className="input-group-append">
+					<span className="input-group-text" id="">Todo per page: </span>
+				</div>
+				<input className="form-control text-center" type="number" value={inputPageSize} onChange={e => setInputPageSize(e.target.value)} onKeyPress={e => {
+								if (e.key === 'Enter') {
+									enterPageSize(e.target.value)
+								}
+							}}
+				/>
+			</div>
+		</center>
+	}
 
 	const markCompleted = async (id) => {
 		try {
@@ -84,6 +162,7 @@ function Todos({id, setId}) {
 		<div className="container">
 			<h1 className="text-center">Todo List</h1>
 			{showErrorMessage()}
+			
       <table className="table">
         <thead>
           <tr>
@@ -110,6 +189,8 @@ function Todos({id, setId}) {
         }
         </tbody>
       </table>
+			{pageSizeControl()}
+			{pageNumberControl()}
     </div>
 	);
 }

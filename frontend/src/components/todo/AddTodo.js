@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useHistory } from "react-router-dom"; 
 
-function AddTodo() {
+function AddTodo({isAuthenticated, setIsAuthenticated}) {
 	const [title, setTitle] = useState('');
   const [targetDate, setTargetDate] = useState('');
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  let history = useHistory();
+
+  useEffect(() => {
+		if(!isAuthenticated){
+			history.push("/");
+		}
+	}, [isAuthenticated, history])
 
 	const onSubmit = async (e) => {
     e.preventDefault();

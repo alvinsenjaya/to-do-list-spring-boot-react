@@ -29,6 +29,12 @@ public class GlobalExceptionHandler {
 		return ResponseEntityBuilder.build(err);
 	}
 	
+	@ExceptionHandler(InvalidPageException.class)
+	public ResponseEntity<Object> handleInvalidPageException(InvalidPageException ex) {
+		CustomException err = new CustomException(LocalDateTime.now(), HttpStatus.BAD_REQUEST, ex.getMessage());
+		return ResponseEntityBuilder.build(err);
+	}
+	
 	@ExceptionHandler(BadCredentialsException.class)
 	public ResponseEntity<Object> handleUsernameNotFoundException(BadCredentialsException ex) {
 		CustomException err = new CustomException(LocalDateTime.now(), HttpStatus.BAD_REQUEST, ex.getMessage());

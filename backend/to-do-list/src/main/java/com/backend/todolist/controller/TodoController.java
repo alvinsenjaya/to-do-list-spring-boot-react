@@ -37,37 +37,43 @@ public class TodoController {
 	
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@RequestMapping(value = "/api/todo", method = RequestMethod.POST)
-	public ResponseEntity<Todo> createTodo(@Valid @RequestBody TodoCreateRequest todoCreateRequest, Principal principal) {
+	public ResponseEntity<Todo> create(@Valid @RequestBody TodoCreateRequest todoCreateRequest, Principal principal) {
 		return new ResponseEntity<>(todoService.create(todoCreateRequest, principal.getName()), HttpStatus.CREATED);
 	}
 	
 	@ResponseStatus(code = HttpStatus.OK)
 	@RequestMapping(value = "/api/todo", method = RequestMethod.GET)
-	public ResponseEntity<List<Todo>> todoReadAll(Principal principal){
+	public ResponseEntity<List<Todo>> readAll(Principal principal){
 		return new ResponseEntity<>(todoService.readAll(principal.getName()), HttpStatus.OK);
 	}
 	
 	@ResponseStatus(code = HttpStatus.OK)
+	@RequestMapping(value = "/api/todo/{pageNumber}/{pageSize}", method = RequestMethod.GET)
+	public ResponseEntity<List<Todo>> readAllPageable(Principal principal, @PathVariable String pageNumber, @PathVariable String pageSize){
+		return new ResponseEntity<>(todoService.readAllPageable(principal.getName(), pageNumber, pageSize), HttpStatus.OK);
+	}
+	
+	@ResponseStatus(code = HttpStatus.OK)
 	@RequestMapping(value = "/api/todo/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Todo> todoRead(@PathVariable long id, Principal principal) {
+	public ResponseEntity<Todo> read(@PathVariable long id, Principal principal) {
 		return new ResponseEntity<>(todoService.readById(id, principal.getName()), HttpStatus.OK);
 	}
 	
 	@ResponseStatus(code = HttpStatus.OK)
 	@RequestMapping(value = "/api/todo/{id}/markcomplete", method = RequestMethod.PUT)
-	public ResponseEntity<Todo> markCompleteTodo(@PathVariable long id, Principal principal) {
+	public ResponseEntity<Todo> markComplete(@PathVariable long id, Principal principal) {
 		return new ResponseEntity<>(todoService.markCompleteById(id, principal.getName()), HttpStatus.OK);
 	}
 	
 	@ResponseStatus(code = HttpStatus.OK)
 	@RequestMapping(value = "/api/todo/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<Todo> updateTodo(@PathVariable long id, @Valid @RequestBody TodoUpdateRequest todoUpdateRequest, Principal principal) {
+	public ResponseEntity<Todo> update(@PathVariable long id, @Valid @RequestBody TodoUpdateRequest todoUpdateRequest, Principal principal) {
 		return new ResponseEntity<>(todoService.updateById(id, todoUpdateRequest, principal.getName()), HttpStatus.OK);
 	}
 	
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	@RequestMapping(value = "/api/todo/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Object> deleteTodo(@PathVariable long id, Principal principal) {
+	public ResponseEntity<Object> delete(@PathVariable long id, Principal principal) {
 		todoService.deleteById(id, principal.getName());
 		return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 	}

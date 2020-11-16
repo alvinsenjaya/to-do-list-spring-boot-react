@@ -3,12 +3,18 @@ import axios from 'axios';
 import moment from 'moment';
 import { useHistory } from "react-router-dom"; 
 
-function UpdateTodo({match}) {
+function UpdateTodo({isAuthenticated, setIsAuthenticated, match}) {
 	const [title, setTitle] = useState('');
   const [targetDate, setTargetDate] = useState('');
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   let history = useHistory();
+
+  useEffect(() => {
+		if(!isAuthenticated){
+			history.push("/");
+		}
+	}, [isAuthenticated, history])
 
   function timeout(delay) {
     return new Promise( res => setTimeout(res, delay) );

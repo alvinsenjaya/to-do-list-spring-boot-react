@@ -12,6 +12,7 @@ function Todos({isAuthenticated, setIsAuthenticated}) {
 	const [pageSize, setPageSize] = useState(5);
 	const [inputPageNumber, setInputPageNumber] = useState(pageNumber);
 	const [inputPageSize, setInputPageSize] = useState(pageSize);
+	const [filter, setFilter] = useState("All");
 	let history = useHistory();
 
 	useEffect(() => {
@@ -24,11 +25,15 @@ function Todos({isAuthenticated, setIsAuthenticated}) {
 		const loadData = async () => {
 			let response = null;
 			try {
-				response = await axios.get(`http://localhost:3001/api/todo/${pageNumber - 1}/${pageSize}`, {
-					headers: {
-						'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
-					}
-				});
+				let url = `http://localhost:3001/api/todo/${pageNumber - 1}/${pageSize}`;
+
+				if(filter === 'Completed'){
+					url = `http://localhost:3001/api/todo/${pageNumber - 1}/${pageSize}?isCompleted=true`;
+				} else if(filter === 'Not Completed'){
+					url = `http://localhost:3001/api/todo/${pageNumber - 1}/${pageSize}?isCompleted=false`;
+				}
+				
+				response = await axios.get(url, {headers: {'Authorization': `Bearer ${sessionStorage.getItem('token')}`,}});
 			} catch(error){
 				if (error.response) {
 					setErrorMessage(error.response.data.message);
@@ -42,7 +47,7 @@ function Todos({isAuthenticated, setIsAuthenticated}) {
 		}
 
 		loadData();
-	}, [changed, pageNumber, pageSize])
+	}, [changed, pageNumber, pageSize, filter])
 
 	const nextPage = () => {
 		setPageNumber(pageNumber + 1);
@@ -110,6 +115,17 @@ function Todos({isAuthenticated, setIsAuthenticated}) {
 		</center>
 	}
 
+	const filterControl = () => {
+		return <div className="col-sm-3 offset-sm-9">
+			<label>Show</label>
+			<select value={filter} onChange={(e) => setFilter(e.target.value)}>
+				<option value="All">All</option>
+				<option value="Completed">Completed</option>
+				<option value="Not Completed">NotCompleted</option>
+			</select>
+		</div>
+	}
+
 	const markCompleted = async (id) => {
 		try {
       await axios.put(`http://localhost:3001/api/todo/${id}/markcomplete`, {}, {
@@ -162,6 +178,8 @@ function Todos({isAuthenticated, setIsAuthenticated}) {
 		<div className="container">
 			<h1 className="text-center">Todo List</h1>
 			{showErrorMessage()}
+			
+			{filterControl()}
 			
       <table className="table">
         <thead>

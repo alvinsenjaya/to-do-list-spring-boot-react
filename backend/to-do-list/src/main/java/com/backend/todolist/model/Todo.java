@@ -13,7 +13,7 @@ public class Todo {
 	
 	@Id
 	@GeneratedValue
-	private long _id;
+	private long id;
 	
 	@NotEmpty(message = "Title is required")
 	private String title;
@@ -37,12 +37,12 @@ public class Todo {
 		this.isCompleted = false;
 	}
 	
-	public long get_id() {
-		return _id;
+	public long getId() {
+		return id;
 	}
 
-	public void set_id(long _id) {
-		this._id = _id;
+	public void setIdd(long id) {
+		this.id = id;
 	}
 
 	public String getUsername() {
@@ -79,7 +79,7 @@ public class Todo {
 
 	@Override
 	public String toString() {
-		return "Todo [_id=" + _id + ", title=" + title + ", targetDate=" + targetDate + ", username=" + username
+		return "Todo [id=" + id + ", title=" + title + ", targetDate=" + targetDate + ", username=" + username
 				+ ", isCompleted=" + isCompleted + "]";
 	}
 	

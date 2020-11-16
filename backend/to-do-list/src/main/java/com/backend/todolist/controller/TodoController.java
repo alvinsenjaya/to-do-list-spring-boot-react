@@ -48,27 +48,27 @@ public class TodoController {
 	}
 	
 	@ResponseStatus(code = HttpStatus.OK)
-	@RequestMapping(value = "/api/todo/{_id}", method = RequestMethod.GET)
-	public ResponseEntity<Todo> todoRead(@PathVariable long _id, Principal principal) {
-		return new ResponseEntity<>(todoService.readById(_id, principal.getName()), HttpStatus.OK);
+	@RequestMapping(value = "/api/todo/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Todo> todoRead(@PathVariable long id, Principal principal) {
+		return new ResponseEntity<>(todoService.readById(id, principal.getName()), HttpStatus.OK);
 	}
 	
 	@ResponseStatus(code = HttpStatus.OK)
-	@RequestMapping(value = "/api/todo/{_id}/markcomplete", method = RequestMethod.PUT)
-	public ResponseEntity<Todo> markCompleteTodo(@PathVariable long _id, Principal principal) {
-		return new ResponseEntity<>(todoService.markCompleteById(_id, principal.getName()), HttpStatus.OK);
+	@RequestMapping(value = "/api/todo/{id}/markcomplete", method = RequestMethod.PUT)
+	public ResponseEntity<Todo> markCompleteTodo(@PathVariable long id, Principal principal) {
+		return new ResponseEntity<>(todoService.markCompleteById(id, principal.getName()), HttpStatus.OK);
 	}
 	
 	@ResponseStatus(code = HttpStatus.OK)
-	@RequestMapping(value = "/api/todo/{_id}", method = RequestMethod.PUT)
-	public ResponseEntity<Todo> updateTodo(@PathVariable long _id, @Valid @RequestBody TodoUpdateRequest todoUpdateRequest, Principal principal) {
-		return new ResponseEntity<>(todoService.updateById(_id, todoUpdateRequest, principal.getName()), HttpStatus.OK);
+	@RequestMapping(value = "/api/todo/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<Todo> updateTodo(@PathVariable long id, @Valid @RequestBody TodoUpdateRequest todoUpdateRequest, Principal principal) {
+		return new ResponseEntity<>(todoService.updateById(id, todoUpdateRequest, principal.getName()), HttpStatus.OK);
 	}
 	
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	@RequestMapping(value = "/api/todo/{_id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Object> deleteTodo(@PathVariable long _id, Principal principal) {
-		todoService.deleteById(_id, principal.getName());
+	@RequestMapping(value = "/api/todo/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<Object> deleteTodo(@PathVariable long id, Principal principal) {
+		todoService.deleteById(id, principal.getName());
 		return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 	}
 }

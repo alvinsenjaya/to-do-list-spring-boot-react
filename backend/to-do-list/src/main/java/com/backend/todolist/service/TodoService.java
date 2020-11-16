@@ -21,8 +21,8 @@ public class TodoService {
 		return todoRepository.save(todo);
 	}
 	
-	public Todo readById(long _id, String username) {
-		Todo todo = todoRepository.findByUsernameAnd_id(username, _id);
+	public Todo readById(long id, String username) {
+		Todo todo = todoRepository.findByUsernameAndId(username, id);
 		if(todo == null) {
 			throw new ResourceNotFoundException("Todo not found");
 		}
@@ -30,19 +30,19 @@ public class TodoService {
 	}
 	
 	public List<Todo> readAll(String username) {
-		return todoRepository.findByUsername(username);
+		return todoRepository.findAllByUsername(username);
 	}
 	
-	public void deleteById(long _id, String username) {
-		Todo todo = todoRepository.findByUsernameAnd_id(username, _id);
+	public void deleteById(long id, String username) {
+		Todo todo = todoRepository.findByUsernameAndId(username, id);
 		if(todo == null) {
 			throw new ResourceNotFoundException("Todo not found");
 		}
-		todoRepository.deleteById(_id);
+		todoRepository.deleteById(id);
 	}
 	
-	public Todo updateById(long _id, TodoUpdateRequest todoUpdateRequest, String username) {
-		Todo todo = todoRepository.findByUsernameAnd_id(username, _id);
+	public Todo updateById(long id, TodoUpdateRequest todoUpdateRequest, String username) {
+		Todo todo = todoRepository.findByUsernameAndId(username, id);
 		if(todo == null) {
 			throw new ResourceNotFoundException("Todo not found");
 		}
@@ -52,8 +52,8 @@ public class TodoService {
 		return todoRepository.save(todo);
 	}
 	
-	public Todo markCompleteById(long _id, String username) {
-		Todo todo = todoRepository.findByUsernameAnd_id(username, _id);
+	public Todo markCompleteById(long id, String username) {
+		Todo todo = todoRepository.findByUsernameAndId(username, id);
 		if(todo == null) {
 			throw new ResourceNotFoundException("Todo not found");
 		}

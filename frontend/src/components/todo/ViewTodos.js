@@ -82,7 +82,7 @@ function Todos({isAuthenticated, setIsAuthenticated}) {
 	const pageNumberControl = () => {
 		return <div>
 			<center>
-				<div className="input-group col-sm-4">
+				<div className="input-group col-lg-4 col-md-6 col-sm-8 col-9">
 					<div className="input-group-append">
 						<button className="btn btn-outline-secondary" onClick={() => previousPage()} >Previous Page</button>
 					</div>
@@ -101,7 +101,7 @@ function Todos({isAuthenticated, setIsAuthenticated}) {
 
 	const pageSizeControl = () => {
 		return <center>
-			<div className="input-group col-sm-3">
+			<div className="input-group col-xl-3 col-md-4 col-sm-5 col-6">
 				<div className="input-group-append">
 					<span className="input-group-text" id="">Todo per page: </span>
 				</div>
@@ -116,14 +116,16 @@ function Todos({isAuthenticated, setIsAuthenticated}) {
 	}
 
 	const filterControl = () => {
-		return <div className="col-sm-3 offset-sm-9">
-			<label>Show</label>
-			<select value={filter} onChange={(e) => setFilter(e.target.value)}>
-				<option value="All">All</option>
-				<option value="Completed">Completed</option>
-				<option value="Not Completed">NotCompleted</option>
-			</select>
-		</div>
+		return <center>
+			<div className="col-6 offset-8">
+				<label>Show</label>
+				<select value={filter} onChange={(e) => setFilter(e.target.value)}>
+					<option value="All">All</option>
+					<option value="Completed">Completed</option>
+					<option value="Not Completed">NotCompleted</option>
+				</select>
+			</div>
+		</center>
 	}
 
 	const markCompleted = async (id) => {

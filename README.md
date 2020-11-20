@@ -7,11 +7,17 @@ Todo list application that can create, read, update, delete, and mark completed.
 
 1. Install node to run react app (frontend) and maven to run spring boot app (backend).
 2. In /frontend directory, run the application
+
 `cd /frontend`
+
 `npm run production`
+
 3. in /backend/to-do-list directory, run spring boot aplication using maven
+
 `cd /frontend/to-do-list`
+
 `mvn spring-boot:run`
+
 4. Open your browser and browse to http://localhost:3000
 
 ### Snapshot of Application

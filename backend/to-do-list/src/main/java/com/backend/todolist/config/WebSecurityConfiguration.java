@@ -16,8 +16,7 @@ import com.backend.todolist.auth.jwt.JwtTokenGenerator;
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Bean
     public BCryptPasswordEncoder passwordEncoder() {
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        return bCryptPasswordEncoder;
+        return new BCryptPasswordEncoder();
     }
 	
 	private static final String[] AUTH_WHITELIST = {
@@ -34,10 +33,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     JwtTokenGenerator jwtTokenGenerator;
     
     @Bean
+    @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
     
+    @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
     	httpSecurity
             .httpBasic().disable()
@@ -49,8 +50,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(AUTH_WHITELIST).permitAll()
                 .antMatchers("/api/auth/signin").permitAll()
                 .antMatchers("/api/auth/signup").permitAll()
-                .antMatchers("/api/todo/**").authenticated()
                 .antMatchers("/api/todo/**/**").authenticated()
+                .antMatchers("/api/todo/**").authenticated()
                 .anyRequest().authenticated()
             .and()
             .apply(new JwtConfigurer(jwtTokenGenerator));

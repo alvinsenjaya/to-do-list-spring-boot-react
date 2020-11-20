@@ -30,7 +30,7 @@ public class JwtTokenFilter extends GenericFilterBean {
     	try {
     		String token = jwtTokenGenerator.resolveToken((HttpServletRequest) req);
             if (token != null && jwtTokenGenerator.validateToken(token)) {
-                Authentication auth = token != null ? jwtTokenGenerator.getAuthentication(token) : null;
+                Authentication auth = jwtTokenGenerator.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
             filterChain.doFilter(req, res);
@@ -49,7 +49,7 @@ public class JwtTokenFilter extends GenericFilterBean {
         try {
             response.getWriter().write(new ObjectMapper().writeValueAsString(customException));
         } catch (IOException e) {
-            e.printStackTrace();
+        	
         }
     }
 }

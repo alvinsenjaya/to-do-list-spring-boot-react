@@ -14,7 +14,7 @@ Todo list application that can create, read, update, delete, and mark completed.
 
 3. in /backend/to-do-list directory, run spring boot aplication using maven
 
-`cd /frontend/to-do-list`
+`cd /backend/to-do-list`
 
 `mvn spring-boot:run`
 

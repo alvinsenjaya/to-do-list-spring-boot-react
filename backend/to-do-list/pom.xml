@@ -11,6 +11,7 @@
 	<groupId>com.backend</groupId>
 	<artifactId>to-do-list</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
 	<name>to-do-list</name>
 	<description>To-do-list application backend using spring boot</description>
 
